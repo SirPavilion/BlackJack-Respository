@@ -7,41 +7,50 @@ class BlackjackGame
 
     static void Main(string[] args)
     {
-        string banner = @"
-                     _______  ___      _______  _______  ___   _      ___  _______  _______  ___   _ 
-                    |  _    ||   |    |   _   ||       ||   | | |    |   ||   _   ||       ||   | | |
-                    | |_|   ||   |    |  |_|  ||       ||   |_| |    |   ||  |_|  ||       ||   |_| |
-                    |       ||   |    |       ||       ||      _|    |   ||       ||       ||      _|
-                    |  _   | |   |___ |       ||      _||     |_  ___|   ||       ||      _||     |_ 
-                    | |_|   ||       ||   _   ||     |_ |    _  ||       ||   _   ||     |_ |    _  |
-                    |_______||_______||__| |__||_______||___| |_||_______||__| |__||_______||___| |_|
-
-";
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        CenterText(banner);
-        Console.ResetColor();
-
-
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("\n\n\n\n\n\n\n\n\n\n");
-        CenterText("Welcome to Multiplayer Blackjack!");
-        Console.ResetColor();
-
-        int playerCount;
-        while (true)
+        do
         {
-            ClearCurrentLine();
-            CenterText("Enter number of players (2-4): ");
-            if (TryReadCenteredInput(out playerCount) && playerCount >= 2 && playerCount <= 4)
-            {
-                break;
-            }
-            CenterText("Invalid input. Please enter a number between 2 and 4.");
-        }
+            string banner = @"
+                      _______  ___      _______  _______  ___   _      ___  _______  _______  ___   _ 
+                     |  _    ||   |    |   _   ||       ||   | | |    |   ||   _   ||       ||   | | |
+                     | |_|   ||   |    |  |_|  ||       ||   |_| |    |   ||  |_|  ||       ||   |_| |
+                     |       ||   |    |       ||       ||      _|    |   ||       ||       ||      _|
+                     |  _   | |   |___ |       ||      _||     |_  ___|   ||       ||      _||     |_ 
+                     | |_|   ||       ||   _   ||     |_ |    _  ||       ||   _   ||     |_ |    _  |
+                     |_______||_______||__| |__||_______||___| |_||_______||__| |__||_______||___| |_|
 
-        PlayBlackjack(playerCount);
+            ";
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            CenterText(banner);
+            Console.ResetColor();
+
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n\n\n\n\n\n\n\n\n\n");
+            CenterText("Welcome to Multiplayer Blackjack!");
+            Console.ResetColor();
+
+            int playerCount;
+            while (true)
+            {
+                ClearCurrentLine();
+                CenterText("Enter number of players (2-4): ");
+                if (TryReadCenteredInput(out playerCount) && playerCount >= 2 && playerCount <= 4)
+                {
+                    break;
+                }
+                CenterText("Invalid input. Please enter a number between 2 and 4.");
+            }
+
+            PlayBlackjack(playerCount);
+            Console.WriteLine("\n");
+            CenterText("Do you want to play again? (yes or no): ");
+        }
+        while (ReadCenteredInput()?.ToLower() == "yes");
+
+        CenterText("Thank you for playing!");
+        Console.ReadLine();
     }
+
 
     static void PlayBlackjack(int playerCount)
     {
