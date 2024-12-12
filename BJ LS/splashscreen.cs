@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics; // Add this to use Process class
 
 namespace BJ_LS
 {
@@ -21,11 +22,23 @@ namespace BJ_LS
         {
             timer1.Enabled = true;
             progressBar1.Increment(2);
-            if (progressBar1.Value == 100 )
+            if (progressBar1.Value == 100)
             {
                 timer1.Enabled = false;
-                Form1 form = new Form1();
-                form.Show();
+
+                // Path to your console application's executable
+                string consoleAppPath = @"C:\Blackjack\BlackJack-Respository\BJ LS\bj\BlackJack.exe";
+
+                try
+                {
+                    // Start the console application
+                    Process.Start(consoleAppPath);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to open console application: " + ex.Message);
+                }
+
                 this.Hide();
             }
         }
