@@ -7,17 +7,37 @@ class BlackjackGame
 
     static void Main(string[] args)
     {
+        string banner = @"
+                     _______  ___      _______  _______  ___   _      ___  _______  _______  ___   _ 
+                    |  _    ||   |    |   _   ||       ||   | | |    |   ||   _   ||       ||   | | |
+                    | |_|   ||   |    |  |_|  ||       ||   |_| |    |   ||  |_|  ||       ||   |_| |
+                    |       ||   |    |       ||       ||      _|    |   ||       ||       ||      _|
+                    |  _   | |   |___ |       ||      _||     |_  ___|   ||       ||      _||     |_ 
+                    | |_|   ||       ||   _   ||     |_ |    _  ||       ||   _   ||     |_ |    _  |
+                    |_______||_______||__| |__||_______||___| |_||_______||__| |__||_______||___| |_|
+
+";
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        CenterText(banner);
+        Console.ResetColor();
+
+
         Console.OutputEncoding = System.Text.Encoding.UTF8;
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("\n\n\n\n\n\n\n\n\n\n");  // Move content down
+        Console.WriteLine("\n\n\n\n\n\n\n\n\n\n");
         CenterText("Welcome to Multiplayer Blackjack!");
         Console.ResetColor();
-        CenterText("Enter number of players (2-4): ");
-        int playerCount;
 
-        while (!TryReadCenteredInput(out playerCount) || playerCount < 2 || playerCount > 4)
+        int playerCount;
+        while (true)
         {
-            CenterText("Invalid input. Please enter a number between 2 and 4: ");
+            ClearCurrentLine();
+            CenterText("Enter number of players (2-4): ");
+            if (TryReadCenteredInput(out playerCount) && playerCount >= 2 && playerCount <= 4)
+            {
+                break;
+            }
+            CenterText("Invalid input. Please enter a number between 2 and 4.");
         }
 
         PlayBlackjack(playerCount);
@@ -36,14 +56,16 @@ class BlackjackGame
         List<string> dealerHand = new List<string> { DrawCard(), DrawCard() };
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        CenterText($"\nDealer's revealed card: {dealerHand[0]}");
-        CenterText($"Dealer's hidden card: ?");
+        CenterText("\n");
+        CenterText($"Dealer's revealed card: {dealerHand[0]}");
+        CenterText("Dealer's hidden card: ?");
         Console.ResetColor();
 
         for (int i = 0; i < playerCount; i++)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            CenterText($"\n--- Player {i + 1}'s Turn ---");
+            CenterText("\n");
+            CenterText($"--- Player {i + 1}'s Turn ---");
             Console.ResetColor();
             while (true)
             {
@@ -73,7 +95,8 @@ class BlackjackGame
         }
 
         Console.ForegroundColor = ConsoleColor.Red;
-        CenterText($"\n--- Dealer's Turn ---");
+        CenterText("\n");
+        CenterText($"--- Dealer's Turn ---");
         Console.ResetColor();
         CenterText($"Dealer's full hand: {string.Join(", ", dealerHand)} (Total: {CalculateHandValue(dealerHand)})");
 
@@ -88,7 +111,8 @@ class BlackjackGame
         CenterText($"Dealer's final hand: {string.Join(", ", dealerHand)} (Total: {dealerTotal})");
 
         Console.ForegroundColor = ConsoleColor.Blue;
-        CenterText("\n--- Results ---");
+        CenterText("\n");
+        CenterText("--- Results ---");
         Console.ResetColor();
         for (int i = 0; i < playerCount; i++)
         {
@@ -160,25 +184,30 @@ class BlackjackGame
     {
         int windowWidth = Console.WindowWidth;
         int stringWidth = text.Length;
-        int spaces = (windowWidth - stringWidth) / 2;
+        int spaces = Math.Max((windowWidth - stringWidth) / 2, 0);
         Console.WriteLine(new string(' ', spaces) + text);
+    }
+
+    static void ClearCurrentLine()
+    {
+        int currentLineCursor = Console.CursorTop;
+        Console.SetCursorPosition(0, Console.CursorTop);
+        Console.Write(new string(' ', Console.WindowWidth));
+        Console.SetCursorPosition(0, currentLineCursor);
     }
 
     static bool TryReadCenteredInput(out int result)
     {
-        CenterText(""); // To center the input prompt itself
-        Console.Write(new string(' ', Console.WindowWidth / 2 - 10));  // Adjust padding as needed
+        int cursorLeft = Console.WindowWidth / 2 + -1; // Center the cursor
+        Console.SetCursorPosition(cursorLeft, Console.CursorTop);
         string input = Console.ReadLine();
-        CenterText(""); // To center the next input prompt
         return int.TryParse(input, out result);
     }
 
     static string ReadCenteredInput()
     {
-        CenterText(""); // To center the input prompt itself
-        Console.Write(new string(' ', Console.WindowWidth / 2 - 10));  // Adjust padding as needed
-        string input = Console.ReadLine();
-        CenterText(""); // To center the next input prompt
-        return input;
+        int cursorLeft = Console.WindowWidth / 2 + -1; // Center the cursor
+        Console.SetCursorPosition(cursorLeft, Console.CursorTop);
+        return Console.ReadLine();
     }
 }
